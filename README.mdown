@@ -1,0 +1,7 @@
+# Sandpile Visualization
+
+## Preface
+
+This project houses a variety of visualizations of Sandpile Theory. 
+
+Sandpile theory is best explained with the aid of a matrix. Each cell can hold a pile of grains, but if the pile height reaches or exceeds four, the pile becomes unsteady and casts one grain in each of the four cardinal directions. These sandpiles are abelian in nature, so stabilization transversals can be implemented in any order, so long as each cell is visited. This theory is related to graph theory and presents opportunity for fractal models and dynamic system research. You can find more information and images of fractal patterns generation from the model in [this article from Nautilus](http://nautil.us/issue/23/dominoes/the-amazing-autotuning-sandpile). For more on the underlying mathematics, the [Wikipedia page](https://en.wikipedia.org/wiki/Abelian_sandpile_model) is an excellent source. 
