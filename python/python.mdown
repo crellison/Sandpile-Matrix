@@ -5,6 +5,6 @@ I initially created this code as a way to better visualize the process of avalan
 
 By editing the comment status of various lines in the if statement at the bottom of the document referencing the top-level script environment, it is possible to run the code with different initial matrix states. This is useful for further understanding the process of toppling in sandpile theory. It may also shed light on the characteristics of the avalanche of the GOOGLE ‘G’
 
-<sub>The enclosed documents are meant as personal projects and are not intended for commercial use at any time.
-The GOOGLE ‘G’ © 2015 Google Inc, used with permission. Google and the Google logo are registered trademarks of Google Inc.
-‘In the Hall of the Mountain King’ - Edvard Grieg, from the Peer Gynt Suite, No. 1</sub>
+<sup>The enclosed documents are meant as personal projects and are not intended for commercial use at any time. </sup>
+<sup>The GOOGLE ‘G’ © 2015 Google Inc, used with permission. Google and the Google logo are registered trademarks of Google Inc.</sup>
+<sup>‘In the Hall of the Mountain King’ - Edvard Grieg, from the Peer Gynt Suite, No. 1</sup>
