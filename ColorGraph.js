@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 var _=require('underscore');
 
 // window.sandpile = window.sandpile || {};
@@ -16,8 +16,12 @@ sandpile.Graph.prototype = {
 		if (vertex<this.dim*this.dim){this.var[vertex] = [];}
 	},
 	addEdge: function(v1,v2) { // assumes v1,v2 in the object
-		this.var[v1].push(v2);
-		if (v1!==v2) {this.var[v2].push(v1);}
+		if (this.var[v1].indexOf(v2)===-1){
+			if (v1!==v2) {
+				this.var[v2].push(v1);
+				this.var[v1].push(v2);
+			}
+		}
 	},
 	elimVertex: function(vertex) {
 		delete this.var[vertex];
@@ -53,7 +57,7 @@ sandpile.Graph.prototype = {
 
 sandpile.ColorGraph = function(dim) {
 	this.graph = new sandpile.Graph(dim);
-	this.colors = Array.apply(null, new Array(dim*dim)).map(Number.prototype.valueOf,0);
+	this.colors = new Array(dim*dim);
 }
 
 sandpile.ColorGraph.prototype = {
@@ -94,6 +98,9 @@ sandpile.ColorGraph.prototype = {
 	colorList: function() {
 		return this.colors;
 	},
+	listAdjacent: function(vertex) {
+		return this.graph.listAdjacent(vertex);
+	},
 	printMatrix: function() {
 		var dim = this.graph.dim;
 		for (var i = 0; i < dim; i++) {
@@ -101,10 +108,121 @@ sandpile.ColorGraph.prototype = {
 		}
 	}
 }
-var graph = new sandpile.ColorGraph(10);
-graph.addVertex(3);
-graph.addVertex(4);
-graph.addVertex(2);
-graph.addVertex(1);
-graph.printMatrix()
+
+// ****************************************************************
+
+
+sandpile.Pile = function(dim) {
+	this.pile = new sandpile.ColorGraph(dim);
+	for (var i=0; i<dim*dim; i++) {
+		this.pile.addVertex(i);
+	}
+	this.dim = dim;
+	this.steps = 0;
+}
+
+sandpile.Pile.prototype = {
+	connectGraph: function() {
+		var count = 0;
+		var dim = this.dim
+		for (var i=0; i<(dim*dim); i++) {
+			if (i>=dim) { // north
+				this.pile.addEdge(i,i-dim);
+			}
+			if (i<dim) { // south
+				this.pile.addEdge(i,i+dim);
+			}
+			if (i%dim!=dim-1) { // east
+				this.pile.addEdge(i,i+1);
+			}
+			if (i%dim!=0) { // west
+				this.pile.addEdge(i,i-1);
+			}
+		}
+	},
+	isStable: function() {
+		for (var i=0; i<(this.dim*this.dim); i++) {
+			if (this.pile.getColor(i)>=4) {return false;}
+		} return true
+	},
+	spreadGrains: function(vertex) {
+		var adjacent = this.listAdjacent(vertex)
+		this.forceColor(vertex,this.getColor(vertex)-adjacent.length);
+		for (var i in adjacent) {
+			this.forceColor(adjacent[i],this.getColor(adjacent[i])+1);
+		}
+	},
+	spreadGrainsBorder: function(vertex) {
+		var adjacent = this.listAdjacent(vertex);
+		this.forceColor(vertex,this.getColor(vertex)-4);
+		for (var i in adjacent) {
+			this.forceColor(adjacent[i],this.getColor(adjacent[i])+1);
+		}
+	},
+	stepPile: function(vertex,bool) { // true==border false==no border
+		if (this.getColor(vertex)>=4) {
+			if (bool===true) {
+				this.spreadGrainsBorder(vertex);
+			} else {
+				this.spreadGrains(vertex);
+			}
+		}
+	},
+	fullStepPile: function(bool) { // true==border false==no border
+		for (var i = 0; i < this.dim*this.dim; i++) {
+			this.stepPile(i,bool);
+		}
+	},
+	stabilizePile: function(bool) { // true==border false==no border
+		while (!this.isStable()) {
+			this.fullStepPile(bool);
+			this.consoleLog()
+		}
+	},
+	// functions passed up to Pile object
+	consoleLog: function() {
+		console.log("\033[H\033[2J");
+		this.pile.printMatrix();
+	},
+	addVertex: function(vertex) {
+		this.pile.addVertex(vertex);
+	},
+	elimVertex: function(vertex) {
+		this.pile.elimVertex(vertex);
+	},
+	addEdge: function(v1,v2) {
+		this.pile.addEdge(v1,v2);
+	},
+	elimEdge: function(v1,v2) {
+		this.pile.elimEdge(v1,v2);
+	},
+	canColor: function(vertex,color) {
+		return this.pile.canColor(vertex,color);
+	},
+	putColor: function(vertex,color) {
+		this.pile.putColor(vertex,color);
+	},
+	forceColor: function(vertex,color) {
+		this.pile.forceColor(vertex,color);
+	},
+	getColor: function(vertex) {
+		return this.pile.getColor(vertex);
+	},
+	colorList: function() {
+		return this.pile.colorList();
+	},
+	listAdjacent: function(vertex) {
+		return this.pile.listAdjacent(vertex);
+	}
+}
+
+var graph = new sandpile.Pile(10);
+graph.connectGraph()
+console.log(graph.pile.listAdjacent(32))
+graph.putColor(55,200);
+graph.consoleLog();
+graph.stabilizePile(false);
+// graph.spreadGrains(55);
+// graph.consoleLog();
+
 

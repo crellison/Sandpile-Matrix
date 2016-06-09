@@ -243,10 +243,10 @@ def googleMatrix():
 if __name__ == '__main__':
 	tracer(0,0)
 	# comment these two lines out for other examples
-	myPile = googleMatrix()
-	frame = googleMatrix()
+	# myPile = googleMatrix()
+	# frame = googleMatrix()
 	# Other examples
-	# myPile = makePileMatrix(15,15)
+	myPile = makePileMatrix(15,15)
 
 	# the following line generates random values for the pile
 	# myPile = RandomizePile(myPile)
@@ -256,15 +256,15 @@ if __name__ == '__main__':
 	# 	myPile[7][i]=20
 
 	# this puts a pile 80 grains high at the center of the matrix
-	# myPile[7][7] = 80
+	myPile[7][7] = 80
 	setScreen(myPile)
 	drawPile(myPile)
 	update()
 	while (isStable(myPile) == False):
 			# switch the comment status of the next two lines when
 			# not working with the googleMatrix() function
-		myPile = fullStepSandpileNoWhite(myPile,frame)
-			# myPile = fullStepSandpile(myPile)
+		# myPile = fullStepSandpileNoWhite(myPile,frame)
+		myPile = fullStepSandpile(myPile)
 		drawPile(myPile)
 		update()
 	ht()
