@@ -219,9 +219,10 @@ sandpile.Pile.prototype = {
 var graph = new sandpile.Pile(10);
 graph.connectGraph()
 console.log(graph.pile.listAdjacent(32))
-graph.putColor(55,200);
+graph.putColor(55,800);
 graph.consoleLog();
-graph.stabilizePile(false);
+graph.stabilizePile(true); // w/o border
+// graph.stabilizePile(false); // w/ border
 // graph.spreadGrains(55);
 // graph.consoleLog();
 
