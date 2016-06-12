@@ -1,0 +1,23 @@
+/*20+140+20+300+20 x 20+300+20*/
+body {
+	padding: 20px;
+	font-family: 'Helvetica Neue',Helvetica,sans-serif;
+	display: flex;
+	justify-content: flex-start;
+}
+/*@media(min-width: 640) {
+	body {
+		display: flex;
+	}
+}*/
+#text-container {
+	width: 240px;
+	height: 400px;
+	margin-right: 20px;
+	background-color: #222;
+}
+#beach {
+	width: 400px !important;
+	height: 400px !important;
+	background-color: #ddd;
+}

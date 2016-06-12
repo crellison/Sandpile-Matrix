@@ -1,8 +1,14 @@
 // "use strict";
 var _=require('underscore');
 
-// window.sandpile = window.sandpile || {};
-var sandpile = {};
+window.sandpile = window.sandpile || {};
+// var sandpile = {};
+
+function pause(time) {
+	var now = Date.now()
+	while(Date.now()<now+time) {}
+	return
+}
 
 // ****************************************************************
 
@@ -125,6 +131,7 @@ sandpile.ColorGraph.prototype = {
 			})
 			console.log(temp.join(' '));
 		}
+		pause(40);
 	},
 	printMatrix: function() {
 		var dim = this.graph.dim;
@@ -202,7 +209,7 @@ sandpile.Pile.prototype = {
 	stabilizePile: function(bool,logType) { // true==border false==no border
 		while (!this.isStable()) {
 			this.fullStepPile(bool);
-			this.consoleLog(logType)
+			if (!_.isUndefined(logType)) {this.consoleLog(logType)}			
 			// console.log(this.steps)
 			if (this.steps===10000) {break}
 		}
@@ -248,14 +255,12 @@ sandpile.Pile.prototype = {
 	}
 }
 
-var graph = new sandpile.Pile(50);
-graph.connectGraph()
-console.log(graph.pile.listAdjacent(32))
-graph.centerColumn(80000)
-graph.consoleLog();
-graph.stabilizePile(true,true); // w/o border
-// graph.stabilizePile(false); // w/ border
-// graph.spreadGrains(55);
-graph.consoleLog(true);
+// var graph = new sandpile.Pile(50);
+// graph.connectGraph()
+// graph.centerColumn(80000)
+// // graph.consoleLog();
+// graph.stabilizePile(true,true); // w/o border
+// // graph.stabilizePile(false); // w/ border
+// graph.consoleLog(true);
 
 
