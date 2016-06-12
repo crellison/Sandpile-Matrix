@@ -101,6 +101,31 @@ sandpile.ColorGraph.prototype = {
 	listAdjacent: function(vertex) {
 		return this.graph.listAdjacent(vertex);
 	},
+	printMatrixAscii: function() {
+		var dim = this.graph.dim;
+		for (var i = 0; i < dim; i++) {
+			var temp = this.colors.slice(dim*i,dim*i+dim)
+			_.forEach(temp, function(elt,index) {
+				switch (elt){
+					case 0:
+						temp[index] = ' ';
+						break;
+					case 1:
+						temp[index] = '.';
+						break;
+					case 2:
+						temp[index] = '*';
+						break;
+					case 3:
+						temp[index] = '&';
+						break;
+					default:
+						temp[index] = String.fromCharCode(1244);
+				}
+			})
+			console.log(temp.join(' '));
+		}
+	},
 	printMatrix: function() {
 		var dim = this.graph.dim;
 		for (var i = 0; i < dim; i++) {
@@ -172,17 +197,24 @@ sandpile.Pile.prototype = {
 		for (var i = 0; i < this.dim*this.dim; i++) {
 			this.stepPile(i,bool);
 		}
+		this.steps++
 	},
-	stabilizePile: function(bool) { // true==border false==no border
+	stabilizePile: function(bool,logType) { // true==border false==no border
 		while (!this.isStable()) {
 			this.fullStepPile(bool);
-			this.consoleLog()
+			this.consoleLog(logType)
+			// console.log(this.steps)
+			if (this.steps===10000) {break}
 		}
 	},
+	centerColumn: function(num) {
+		graph.putColor(this.dim*(this.dim/2)+this.dim/2,num);
+	},
 	// functions passed up to Pile object
-	consoleLog: function() {
+	consoleLog: function(bool) {
 		console.log("\033[H\033[2J");
-		this.pile.printMatrix();
+		if (bool) {this.pile.printMatrixAscii();}
+		else {this.pile.printMatrix();}
 	},
 	addVertex: function(vertex) {
 		this.pile.addVertex(vertex);
@@ -216,14 +248,14 @@ sandpile.Pile.prototype = {
 	}
 }
 
-var graph = new sandpile.Pile(10);
+var graph = new sandpile.Pile(50);
 graph.connectGraph()
 console.log(graph.pile.listAdjacent(32))
-graph.putColor(55,800);
+graph.centerColumn(80000)
 graph.consoleLog();
-graph.stabilizePile(true); // w/o border
+graph.stabilizePile(true,true); // w/o border
 // graph.stabilizePile(false); // w/ border
 // graph.spreadGrains(55);
-// graph.consoleLog();
+graph.consoleLog(true);
 
 
