@@ -1,0 +1,117 @@
+/*20+140+20+300+20 x 20+300+20*/
+body {
+	padding: 20px;
+	font-family: 'Helvetica Neue',Helvetica,sans-serif;
+	display: flex;
+	justify-content: flex-start;
+}
+/*@media(min-width: 640) {
+	body {
+		display: flex;
+	}
+}*/
+.h1, .h2, .h3, h1, h2, h3 {
+	margin-top: 10px;
+	padding-right: 20px;
+}
+h4 {
+	margin: 0 0 5px 0;
+}
+#text-container {
+	position: relative;
+	width: 240px;
+	height: 400px;
+	padding: 0 10px;
+	/*background-color: #222;*/
+	color: #222;
+}
+div > div.menu {
+	padding-right: 20px;
+	margin-top: 20px;
+	/*background-color: #fff;*/
+	/*height: 20px;*/
+}
+div > h4 {
+	display: inline;
+	/*padding-right: 5px;*/
+}
+div#counters > h4 {
+	display: block;
+}
+.btn.btn-default, .btn.btn-primary {
+	display: block;
+	padding: 0;
+	border: none;
+	color: #222;
+	background-color: transparent;
+	text-align: left;
+}
+.btn.btn-default:active, .btn.btn-primary:active {
+	transform-style: none;
+	border-radius: 0;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+}
+.btn.btn-default:focus, .btn.btn-primary:focus {
+	background-color: transparent;
+	border-color: transparent;
+}
+.btn.btn-default:hover, .btn.btn-primary:hover {
+	color: #e74c3c;
+}
+.well {
+	padding-top: 0;
+	padding-bottom: 0 !important;
+	border-radius: 0;
+	border-width: 0 0 0 1px;
+	background-color: #fff;
+	border-color: #222;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+}
+.form-control {
+	display: inline;
+	background-color: transparent;
+	height: 22px;
+	padding: 0;
+	border-color: #222;
+    border-width: 0 0 1px 0;
+    border-radius: 0;
+	color: #222;
+	width: 40px;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+}
+.form-control:focus {
+	border-color: #222;
+	outline: none;
+}
+#sandcastles {}
+#mega-castles {}
+#mega-menu {
+	height: 45px !important;
+}
+#action-bronson {}
+#counters {
+	position: absolute;
+	bottom: 0;
+}
+#beach-container {
+	width: 380px;
+	height: 440px;
+	padding: 0;
+	font-family: Courier, 'Courier New';
+	font-size: 8.89px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-content: space-around;
+	background-color: #222;
+	color: #fff;
+}
+#beach-container p {
+	margin: 0;
+}

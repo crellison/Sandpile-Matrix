@@ -1,5 +1,5 @@
 // "use strict";
-var _=require('underscore');
+// var _=require('underscore');
 
 window.sandpile = window.sandpile || {};
 // var sandpile = {};
@@ -58,8 +58,8 @@ sandpile.Graph.prototype = {
 		return this.var[vertex];
 	}
 }
-// ****************************************************************
 
+// ****************************************************************
 
 sandpile.ColorGraph = function(dim) {
 	this.graph = new sandpile.Graph(dim);
@@ -107,29 +107,31 @@ sandpile.ColorGraph.prototype = {
 	listAdjacent: function(vertex) {
 		return this.graph.listAdjacent(vertex);
 	},
-	printMatrixAscii: function() {
+	printMatrixAscii: function(bool) {
+		if (!bool) {$('#beach-container').empty()}
 		var dim = this.graph.dim;
 		for (var i = 0; i < dim; i++) {
 			var temp = this.colors.slice(dim*i,dim*i+dim)
 			_.forEach(temp, function(elt,index) {
 				switch (elt){
 					case 0:
-						temp[index] = ' ';
-						break;
-					case 1:
 						temp[index] = '.';
 						break;
-					case 2:
+					case 1:
 						temp[index] = '*';
 						break;
-					case 3:
+					case 2:
 						temp[index] = '&';
 						break;
-					default:
+					case 3:
 						temp[index] = String.fromCharCode(1244);
+						break;
+					default:
+						temp[index] = String.fromCharCode(9608);
 				}
 			})
-			console.log(temp.join(' '));
+			if (bool) {console.log(temp.join(' '));}
+			else {$('#beach-container').append($('<p>'+temp.join(' ')+'</p>'));}
 		}
 		pause(40);
 	},
@@ -142,7 +144,6 @@ sandpile.ColorGraph.prototype = {
 }
 
 // ****************************************************************
-
 
 sandpile.Pile = function(dim) {
 	this.pile = new sandpile.ColorGraph(dim);
@@ -206,22 +207,29 @@ sandpile.Pile.prototype = {
 		}
 		this.steps++
 	},
-	stabilizePile: function(bool,logType) { // true==border false==no border
+	stabilizePile: function(bool,logType,consoleOrHTML) { // true==border false==no border
 		while (!this.isStable()) {
+			// console.log('Current steps: '+this.steps)
 			this.fullStepPile(bool);
-			if (!_.isUndefined(logType)) {this.consoleLog(logType)}			
+			if (!_.isUndefined(logType)) {this.consoleLog(logType,consoleOrHTML)}			
 			// console.log(this.steps)
-			if (this.steps===10000) {break}
+			// if (this.steps===10000) {break}
 		}
 	},
 	centerColumn: function(num) {
-		graph.putColor(this.dim*(this.dim/2)+this.dim/2,num);
+		this.putColor(this.dim*Math.floor(this.dim/2)+Math.floor(this.dim/2),num);
 	},
 	// functions passed up to Pile object
-	consoleLog: function(bool) {
+	consoleLog: function(bool,consoleOrHTML) {
 		console.log("\033[H\033[2J");
-		if (bool) {this.pile.printMatrixAscii();}
+		// console.log('Current steps: '+this.steps)
+		if (bool) {this.pile.printMatrixAscii(consoleOrHTML);}
 		else {this.pile.printMatrix();}
+	},
+	clear: function() {
+		for (var i = 0; i < this.dim*this.dim; i++) {
+			this.forceColor(i,0)
+		}
 	},
 	addVertex: function(vertex) {
 		this.pile.addVertex(vertex);
@@ -252,15 +260,37 @@ sandpile.Pile.prototype = {
 	},
 	listAdjacent: function(vertex) {
 		return this.pile.listAdjacent(vertex);
+	},
+	colorsToString() {
+		var temp = []
+		_.forEach(this.pile.colors, function(elt,index) {
+			switch (elt){
+				case 0:
+					temp[index] = '.';
+					break;
+				case 1:
+					temp[index] = '*';
+					break;
+				case 2:
+					temp[index] = '&';
+					break;
+				case 3:
+					temp[index] = String.fromCharCode(1244);
+					break;
+				default:
+					temp[index] = String.fromCharCode(9608);
+			}
+		})
+		return temp.join(' ')
 	}
 }
 
 // var graph = new sandpile.Pile(50);
 // graph.connectGraph()
-// graph.centerColumn(80000)
+// graph.centerColumn(800)
 // // graph.consoleLog();
 // graph.stabilizePile(true,true); // w/o border
 // // graph.stabilizePile(false); // w/ border
 // graph.consoleLog(true);
 
-
+// ****************************************************************
