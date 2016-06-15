@@ -12,4 +12,6 @@ Sandpile theory is best explained with the aid of a matrix. Each cell can hold a
 1. [javascript](js/js.mdown)
 1. java
 
+## Example output from JavaScript Project
+
 ![Sandpile Example](sandpileExample.png)

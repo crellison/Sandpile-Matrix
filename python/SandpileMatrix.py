@@ -241,7 +241,7 @@ def googleMatrix():
 
 	
 if __name__ == '__main__':
-	# tracer(0,0)
+	tracer(0,0)
 	# comment these two lines out for other examples
 	myPile = googleMatrix()
 	frame = googleMatrix()
@@ -266,10 +266,10 @@ if __name__ == '__main__':
 			# not working with the googleMatrix() function
 		myPile = fullStepSandpileNoWhite(myPile,frame)
 		# myPile = fullStepSandpile(myPile)
-		# drawPile(myPile)
-		# update()
+		drawPile(myPile)
+		update()
 		print(count)
 		count+=1
-	# ht()
-	# done()
-	printMatrix(myPile)
+	ht()
+	done()
+	# printMatrix(myPile)
