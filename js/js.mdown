@@ -4,6 +4,7 @@
 This is the most recent and optimized version of my sandpile object. What originally started as a bare-bones algorithm in Python, and then transitioned to a mostly functional object oriented model in Java has now been further improved to give better run time and a more intuitive yet rapid rendering of the sandpile object. The specifics of optimization lie primarily in the manner of finding the adjacent nodes to a given node in the matrix and manipulation of the color storage object. Between these and other minor adjustments that have transpired since the original Python build in January, this JavaScript version runs faster by approximately one order of magnitude (though the same effect could have been achieved by optimizing my algorithm in Python or in Java). 
 
 This file is meant to be run with node on the command line, and help documentation detailing use and input will show if no arguments are entered. Below, I have provided the help information as a form of documentation on this project.
+
 ```
     -h, --help            output usage information
     -d, --dim <n>         Specify dimension of sandpile (default 50)
