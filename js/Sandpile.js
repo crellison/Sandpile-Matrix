@@ -1,8 +1,9 @@
 // "use strict";
-// var _=require('underscore');
+var _=require('underscore');
+var program = require('commander');
 
-window.sandpile = window.sandpile || {};
-// var sandpile = {};
+// window.sandpile = window.sandpile || {};
+var sandpile = {};
 
 function pause(time) {
 	var now = Date.now()
@@ -107,33 +108,32 @@ sandpile.ColorGraph.prototype = {
 	listAdjacent: function(vertex) {
 		return this.graph.listAdjacent(vertex);
 	},
-	printMatrixAscii: function(bool) {
-		if (!bool) {$('#beach-container').empty()}
+	printMatrixAscii: function() {
 		var dim = this.graph.dim;
 		for (var i = 0; i < dim; i++) {
 			var temp = this.colors.slice(dim*i,dim*i+dim)
 			_.forEach(temp, function(elt,index) {
 				switch (elt){
 					case 0:
-						temp[index] = '.';
+						temp[index] = ' ';
 						break;
 					case 1:
-						temp[index] = '*';
+						temp[index] = '.';
 						break;
 					case 2:
-						temp[index] = '&';
+						temp[index] = '*';
 						break;
 					case 3:
-						temp[index] = String.fromCharCode(1244);
+						temp[index] = '&';
 						break;
 					default:
 						temp[index] = String.fromCharCode(9608);
+					// temp[index] = String.fromCharCode(1244);
 				}
 			})
-			if (bool) {console.log(temp.join(' '));}
-			else {$('#beach-container').append($('<p>'+temp.join(' ')+'</p>'));}
+			console.log(temp.join(' '));
 		}
-		pause(40);
+		pause(70);
 	},
 	printMatrix: function() {
 		var dim = this.graph.dim;
@@ -185,7 +185,7 @@ sandpile.Pile.prototype = {
 			this.forceColor(adjacent[i],this.getColor(adjacent[i])+1);
 		}
 	},
-	spreadGrainsBorder: function(vertex) {
+	spreadGrainsNoBorder: function(vertex) {
 		var adjacent = this.listAdjacent(vertex);
 		this.forceColor(vertex,this.getColor(vertex)-4);
 		for (var i in adjacent) {
@@ -194,8 +194,8 @@ sandpile.Pile.prototype = {
 	},
 	stepPile: function(vertex,bool) { // true==border false==no border
 		if (this.getColor(vertex)>=4) {
-			if (bool===true) {
-				this.spreadGrainsBorder(vertex);
+			if (!bool) {
+				this.spreadGrainsNoBorder(vertex);
 			} else {
 				this.spreadGrains(vertex);
 			}
@@ -207,28 +207,38 @@ sandpile.Pile.prototype = {
 		}
 		this.steps++
 	},
-	stabilizePile: function(bool,logType,consoleOrHTML) { // true==border false==no border
+	stabilizePile: function(bool,logType) { // true==border false==no border
 		while (!this.isStable()) {
-			// console.log('Current steps: '+this.steps)
 			this.fullStepPile(bool);
-			if (!_.isUndefined(logType)) {this.consoleLog(logType,consoleOrHTML)}			
+			if (!_.isUndefined(logType)) {this.consoleLog(logType);}
 			// console.log(this.steps)
 			// if (this.steps===10000) {break}
 		}
 	},
 	centerColumn: function(num) {
-		this.putColor(this.dim*Math.floor(this.dim/2)+Math.floor(this.dim/2),num);
+		this.pile.putColor(this.dim*(this.dim/2)+this.dim/2,num);
+	},
+	trumpWall: function(num) {
+		for (var i = this.dim*Math.floor(this.dim/2); i < this.dim*Math.floor(this.dim/2)+this.dim; i++) {
+			this.forceColor(i,num);
+		}
+	},
+	xmen: function(num) {
+		for (var i = 0; i < this.dim; i++) {
+			this.forceColor(i+i*this.dim,num);
+			this.forceColor(this.dim-i-1+i*this.dim,num);
+		}
 	},
 	// functions passed up to Pile object
-	consoleLog: function(bool,consoleOrHTML) {
+	consoleLog: function(bool) {
 		console.log("\033[H\033[2J");
-		// console.log('Current steps: '+this.steps)
-		if (bool) {this.pile.printMatrixAscii(consoleOrHTML);}
-		else {this.pile.printMatrix();}
+		console.log('Current steps: '+this.steps);
+		if (bool) {this.pile.printMatrixAscii();}
+		// else {this.pile.printMatrix();}
 	},
 	clear: function() {
 		for (var i = 0; i < this.dim*this.dim; i++) {
-			this.forceColor(i,0)
+			this.forceColor(i,0);
 		}
 	},
 	addVertex: function(vertex) {
@@ -260,37 +270,64 @@ sandpile.Pile.prototype = {
 	},
 	listAdjacent: function(vertex) {
 		return this.pile.listAdjacent(vertex);
-	},
-	colorsToString() {
-		var temp = []
-		_.forEach(this.pile.colors, function(elt,index) {
-			switch (elt){
-				case 0:
-					temp[index] = '.';
-					break;
-				case 1:
-					temp[index] = '*';
-					break;
-				case 2:
-					temp[index] = '&';
-					break;
-				case 3:
-					temp[index] = String.fromCharCode(1244);
-					break;
-				default:
-					temp[index] = String.fromCharCode(9608);
-			}
-		})
-		return temp.join(' ')
 	}
 }
 
-// var graph = new sandpile.Pile(50);
+// ****************************************************************
+var presetInfo = '\t1: center column (default) - single stack of grains on the center of the sandpile\
+				\n\t2: trump wall - stacks of grains in a wall across the central horizontal axis\
+				\n\t3: xmen - two diagonal walls of grains connecting the opposing corners\n'
+program
+ 	.option('-d, --dim <n>', 'Specify dimension of sandpile (default 50)', parseInt)
+ 	.option('-p, --preset <n>', 'Specify preset map\n\n'+presetInfo, parseInt)
+ 	.option('-h, --height <n>', 'Specify height of preset', parseInt)
+ 	.option('-c, --consolelog <n>', 'Specify whether or not to print in the console (accepts 1 or 0)', parseInt)
+ 	.option('-b, --border <n>', 'Specify whether or not grains can fall of the edge (accepts 1 or 0)', parseInt);
+program.parse(process.argv);
+
+if (process.argv.length === 2) {
+  program.help();
+} else {
+	main()
+}
+
+function main() {
+	if (!program.dim) {console.log('No dim specified, default of 50 used')}
+	if (!program.preset) {console.log('No preset specified, default of center column used')}
+	if (!program.height) {console.log('No height specified, default of 50 used')}
+	if (!program.consolelog) {console.log('Log status uspecified, default of no log used')}
+	if (!program.border) {console.log('Border status uspecified, default of open used')}
+	var dim = program.dim || 50
+	var preset = program.preset || 1
+	var height = program.height || 50
+	var consolelog = program.consolelog || 0
+	var border = program.border || 0
+	var pile = new sandpile.Pile(dim)
+	pile.connectGraph()
+	switch (preset) {
+		case 1: pile.centerColumn(height)
+			break 
+		case 2: pile.trumpWall(height)
+			break
+		case 3: pile.xmen(height)
+			break
+	}
+	pile.stabilizePile(border,consolelog)
+	pile.consoleLog(true)
+}
+
+// // 9608
+// var graph = new sandpile.Pile(140);
 // graph.connectGraph()
-// graph.centerColumn(800)
+// // graph.centerColumn(80000)
+// graph.xmen(800)
+// // graph.trumpWall(800)
 // // graph.consoleLog();
-// graph.stabilizePile(true,true); // w/o border
+// graph.stabilizePile(true); // w/o border
 // // graph.stabilizePile(false); // w/ border
 // graph.consoleLog(true);
 
-// ****************************************************************
+
+
+
+

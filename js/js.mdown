@@ -1,0 +1,19 @@
+# Sandpile Visualizer
+## 13 June 2016
+
+This is the most recent and optimized version of my sandpile object. What originally started as a bare-bones algorithm in Python, and then transitioned to a mostly functional object oriented model in Java has now been further improved to give better run time and a more intuitive yet rapid rendering of the sandpile object. The specifics of optimization lie primarily in the manner of finding the adjacent nodes to a given node in the matrix and manipulation of the color storage object. Between these and other minor adjustments that have transpired since the original Python build in January, this JavaScript version runs faster by approximately one order of magnitude (though the same effect could have been achieved by optimizing my algorithm in Python or in Java). 
+
+This file is meant to be run with node on the command line, and help documentation detailing use and input will show if no arguments are entered. Below, I have provided the help information as a form of documentation on this project.
+```
+    -h, --help            output usage information
+    -d, --dim <n>         Specify dimension of sandpile (default 50)
+    -p, --preset <n>      Specify preset map
+    
+    	1: center column (default) - single stack of grains on the center of the sandpile				
+    	2: trump wall - stacks of grains in a wall across the central horizontal axis				
+    	3: xmen - two diagonal walls of grains connecting the opposing corners
+    
+    -h, --height <n>      Specify height of preset
+    -c, --consolelog <n>  Specify whether or not to print in the console (accepts 1 or 0)
+    -b, --border <n>      Specify whether or not grains can fall of the edge (accepts 1 or 0)
+```

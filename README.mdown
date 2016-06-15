@@ -9,5 +9,5 @@ Sandpile theory is best explained with the aid of a matrix. Each cell can hold a
 ## The Projects
 
 1. [python](python/python.mdown)
-1. javascript
+1. [javascript](js/js.mdown)
 1. java
